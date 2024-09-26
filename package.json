@@ -1,0 +1,30 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "foodeco",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./node_modules/.bin/babel-node src/server.js"
+  },
+  "keywords": [
+    "food",
+    "eco"
+  ],
+  "author": "professional project",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase": "8.6.8",
+    "npm": "^10.2.5"
+  },
+  "devDependencies": {
+    "@babel/core": "7.23.6",
+    "@babel/node": "7.22.19",
+    "@babel/preset-env": "7.23.6",
+    "nodemon": "^3.1.7"
+  }
+}
