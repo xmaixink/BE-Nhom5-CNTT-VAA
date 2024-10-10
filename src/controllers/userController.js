@@ -1,18 +1,29 @@
 import userService from "../services/userService";
 
 let createNewUser = async (req, res) => {
-
-      console.log('check user', req.body)
-
       let message = await userService.createNewUserService(req.body);
 
       return res.status(200).json(message)
 }
 
 let getAllUser = async (req, res) => {
-      let message = await userService.getAllUserService()
+      let id = req.query.id //ALL, id
 
-      return res.status(200).json(message)
+      if (!id) {
+            return res.status(200).json({
+                  errCode: 1,
+                  errMessage: "Missing required parameters user",
+                  users: []
+            })
+      }
+
+      let users = await userService.getAllUserService(id)
+
+      return res.status(200).json({
+            errCode: 0,
+            errMessage: "You get user succeed",
+            users
+      })
 }
 
 let deleteUser = async (req, res) => {

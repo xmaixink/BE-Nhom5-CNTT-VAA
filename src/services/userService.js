@@ -4,11 +4,13 @@ let userDB = db.collection('users')
 
 let createNewUserService = (data) => {
       return new Promise(async (resolve, reject) => {
+
             try {
                   await userDB.doc().set({
-                        firstName: data.firstName,
-                        lastName: data.lastName,
                         email: data.email,
+                        name: data.name,
+                        password: data.password,
+                        address: data.address,
                   })
 
                   resolve({
@@ -21,19 +23,29 @@ let createNewUserService = (data) => {
       })
 }
 
-let getAllUserService = () => {
+let getAllUserService = (userId) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  let data = await userDB.get()
-                  let allUser = data.docs.map((doc) => doc.data())
-                  let idUser = data.docs.map((doc) => doc.id)
+                  let user = ''
+                  // let idUser = data.docs.map((doc) => doc.snapshot)
+                  if (userId === 'ALL') {
+                        let dataALL = await userDB.get()
 
-                  console.log(idUser.length)
-                  resolve({
-                        errCode: 0,
-                        message: "Get All users",
-                        allUser
-                  });
+                        user = dataALL.docs.map((doc) => ({
+                              id: doc.id, // Lấy ID của tài liệu
+                              ...doc.data() // Lấy dữ liệu của tài liệu
+                        }))
+
+                  }
+                  if (userId && userId !== 'ALL') {
+                        let dataId = await userDB.doc(userId)
+                        let userData = await dataId.get()
+                        user = {
+                              id: userData.id, // Lấy ID của tài liệu
+                              ...userData.data() // Lấy dữ liệu của tài liệu
+                        };
+                  }
+                  resolve(user);
 
             } catch (e) {
                   reject(e)
@@ -60,9 +72,9 @@ let deleteUserService = (userId) => {
 let updateUserService = (data) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  await userDB.doc(data.id).update({
-                        firstName: data.firstName,
-                        lastName: data.lastName,
+                  await userDB.doc(data.idEditUser).update({
+                        name: data.name,
+                        address: data.address,
                         email: data.email,
                   });
 
