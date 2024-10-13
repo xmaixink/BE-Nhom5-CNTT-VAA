@@ -1,23 +1,14 @@
 const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema(
+const RestaurantSchema = mongoose.Schema(
       {
-            email: {
-                  type: String,
-                  unique: true,
-                  required: true,
-            },
-            name: {
-                  type: String,
-                  required: [true, "PLease enter User name"],
-            },
-            password: {
+            emailVendor: {
                   type: String,
                   required: true,
             },
-            phoneNumber: {
+            nameRestaurant: {
                   type: String,
-                  required: false,
+                  required: true,
             },
             address: {
                   type: String,
@@ -27,9 +18,9 @@ const UserSchema = mongoose.Schema(
                   type: String,
                   required: false,
             },
-            role: {
-                  type: String,
-                  required: false,
+            action: {
+                  type: Boolean,
+                  required: true,
             }
       },
       {
@@ -37,6 +28,6 @@ const UserSchema = mongoose.Schema(
       }
 );
 
-const User = mongoose.model("User", UserSchema);
+const User = mongoose.model("Restaurant", RestaurantSchema);
 
 module.exports = User;

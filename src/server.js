@@ -1,8 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import initWebRoutes from "./route/web.js";
+import mongoose from "mongoose"
 
 require("dotenv").config();
+const mongoURL = process.env.MONGO_URL;
 
 let app = express()
 
@@ -37,6 +39,13 @@ initWebRoutes(app);
 
 let port = process.env.PORT || 6969;
 
+try {
+      mongoose.connect(mongoURL)
+      console.log("Connection to database");
+} catch (error) {
+      console.log('Kết nối mongo bị lỗi r', error)
+}
+
 app.listen(port, () => {
-      console.log(`http://localhost:${port}`)
+      console.log(`Server is running on port http://localhost:${port}`)
 })

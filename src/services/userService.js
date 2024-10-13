@@ -1,17 +1,32 @@
-import db from '../../config'
+import User from "../models/user"
 
-let userDB = db.collection('users')
+import bcrypt from "bcrypt";
+
+const salt = bcrypt.genSaltSync(10);
+
+const hashUserPassword = (password) => {
+      return new Promise(async (resolve, reject) => {
+            try {
+                  let hashPassword = await bcrypt.hashSync(password, salt);
+                  resolve(hashPassword);
+            } catch (e) {
+                  reject(e);
+            }
+      })
+}
 
 let createNewUserService = (data) => {
       return new Promise(async (resolve, reject) => {
 
             try {
-                  await userDB.doc().set({
+                  let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+
+                  await User.create({
                         email: data.email,
                         name: data.name,
-                        password: data.password,
-                        address: data.address,
-                  })
+                        password: hashPasswordFromBcrypt,
+                        address: data.address
+                  });
 
                   resolve({
                         errCode: 0,
@@ -26,26 +41,16 @@ let createNewUserService = (data) => {
 let getAllUserService = (userId) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  let user = ''
-                  // let idUser = data.docs.map((doc) => doc.snapshot)
-                  if (userId === 'ALL') {
-                        let dataALL = await userDB.get()
+                  let users = "";
 
-                        user = dataALL.docs.map((doc) => ({
-                              id: doc.id, // Lấy ID của tài liệu
-                              ...doc.data() // Lấy dữ liệu của tài liệu
-                        }))
+                  if (userId === "ALL") {
+                        users = await User.find().select('-password');
+                  }
+                  if (userId && userId != 'ALL') {
+                        users = await User.findOne({ _id: userId }).select('-password');
+                  }
 
-                  }
-                  if (userId && userId !== 'ALL') {
-                        let dataId = await userDB.doc(userId)
-                        let userData = await dataId.get()
-                        user = {
-                              id: userData.id, // Lấy ID của tài liệu
-                              ...userData.data() // Lấy dữ liệu của tài liệu
-                        };
-                  }
-                  resolve(user);
+                  resolve(users);
 
             } catch (e) {
                   reject(e)
@@ -56,8 +61,16 @@ let getAllUserService = (userId) => {
 let deleteUserService = (userId) => {
       return new Promise(async (resolve, reject) => {
             try {
-
-                  await userDB.doc(userId).delete();
+                  let foundUser = await User.findOne(
+                        { _id: userId }
+                  )
+                  if (!foundUser) {
+                        resolve({
+                              errCode: 2,
+                              errMessage: `The user isn't exist`
+                        })
+                  }
+                  await User.findByIdAndDelete(userId);
 
                   resolve({
                         errCode: 0,
@@ -72,11 +85,34 @@ let deleteUserService = (userId) => {
 let updateUserService = (data) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  await userDB.doc(data.idEditUser).update({
-                        name: data.name,
-                        address: data.address,
-                        email: data.email,
-                  });
+                  if (!data.id) {
+                        resolve({
+                              errCode: 2,
+                              errMessage: "Missing required parameters updateUserService"
+                        })
+                  }
+
+                  const user = await User.findOne({
+                        _id: data.id,
+                  })
+
+                  if (user) {
+                        user.email = data.email;
+                        user.name = data.name;
+                        user.address = data.address
+
+                        await user.save();
+
+                        resolve({
+                              errCode: 0,
+                              message: "Update the user succeeds!"
+                        })
+                  } else {
+                        resolve({
+                              errCode: 1,
+                              errMessage: "User not found"
+                        });
+                  }
 
                   resolve({
                         errCode: 0,
