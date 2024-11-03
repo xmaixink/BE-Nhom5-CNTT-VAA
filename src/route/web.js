@@ -2,7 +2,13 @@ import express from "express";
 import productController from "../controllers/productController.js";
 import restaurantController from "../controllers/restaurantController.js";
 import userController from "../controllers/userController.js";
+<<<<<<< HEAD
 import vendorController from "../controllers/vendorController.js";
+=======
+import vendorController from "../controllers/vendorController.js"
+import restaurantController from "../controllers/restaurantController.js"
+import productController from "../controllers/productController.js";
+>>>>>>> 60a8c63 (get all delete update)
 
 let router = express.Router();
 

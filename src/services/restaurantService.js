@@ -36,16 +36,16 @@ let createNewRestaurantService = (data) => {
       })
 }
 
-let getAllRestaurantService = (vendorEmail) => {
+let getAllRestaurantService = (emailVendor) => {
       return new Promise(async (resolve, reject) => {
             try {
                   let users = "";
 
-                  if (vendorEmail === "ALL") {
-                        users = await User.find().select('-password');
+                  if (emailVendor === "ALL") {
+                        users = await Restaurant.find()
                   }
-                  if (vendorEmail && vendorEmail != 'ALL') {
-                        users = await User.findOne({ vendorEmail: vendorEmail }).select('-password');
+                  if (emailVendor && emailVendor != 'ALL') {
+                        users = await User.findOne({ emailVendor: emailVendor })
                   }
 
                   resolve(users);

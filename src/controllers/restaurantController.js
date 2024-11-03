@@ -21,7 +21,7 @@ let getAllRestaurants = async (req, res) => {
 
       return res.status(200).json({
             errCode: 0,
-            errMessage: "You get user succeed",
+            errMessage: "Get restaurant succeed !s",
             restaurants
       })
 }

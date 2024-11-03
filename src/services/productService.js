@@ -22,6 +22,7 @@ let createNewProductService = (data) => {
       })
 }
 let getAllProductService = (productId) => {
+<<<<<<< HEAD
     return new Promise(async (resolve, reject) => {
           try {
                 let products = "";
@@ -99,9 +100,95 @@ let updateProductService = (data) => {
                 reject(e);
           }
     });
+=======
+      return new Promise(async (resolve, reject) => {
+            try {
+                  let products = "";
+
+                  if (productId === "ALL") {
+                        products = await Product.find();
+                  }
+                  if (productId && productId != 'ALL') {
+                        products = await Product.findOne({ _id: productId });
+                  }
+
+                  resolve(products);
+
+            } catch (e) {
+                  reject(e);
+            }
+      });
+};
+let deleteProductService = (productId) => {
+      return new Promise(async (resolve, reject) => {
+            try {
+                  let foundProduct = await Product.findOne(
+                        { _id: productId }
+                  );
+                  if (!foundProduct) {
+                        resolve({
+                              errCode: 2,
+                              errMessage: `The product doesn't exist`
+                        });
+                  }
+                  await Product.findByIdAndDelete(productId);
+
+                  resolve({
+                        errCode: 0,
+                        message: "Delete Product rui ",
+                  });
+            } catch (e) {
+                  reject(e);
+            }
+      });
+};
+let updateProductService = (data) => {
+      return new Promise(async (resolve, reject) => {
+            try {
+                  console.log('check data', data)
+                  if (!data.id) {
+                        resolve({
+                              errCode: 2,
+                              errMessage: "Missing required parameters updateProductService"
+                        });
+                  }
+
+                  const product = await Product.findOne({
+                        _id: data.id,
+                  });
+
+                  if (product) {
+                        product.name = data.name;
+                        product.price = data.price;
+                        product.description = data.description;
+                        product.ingredients = data.ingredients;
+                        product.image = data.image;
+
+                        await product.save();
+
+                        resolve({
+                              errCode: 0,
+                              message: "Update the product succeeds!"
+                        });
+                  } else {
+                        resolve({
+                              errCode: 1,
+                              errMessage: "Product not found"
+                        });
+                  }
+
+            } catch (e) {
+                  reject(e);
+            }
+      });
+>>>>>>> 60a8c63 (get all delete update)
 };
 
 
 module.exports = {
+<<<<<<< HEAD
     createNewProductService, getAllProductService,deleteProductService,updateProductService
+=======
+      createNewProductService, getAllProductService, deleteProductService, updateProductService
+>>>>>>> 60a8c63 (get all delete update)
 };
