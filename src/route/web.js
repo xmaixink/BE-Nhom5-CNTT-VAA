@@ -2,13 +2,8 @@ import express from "express";
 import productController from "../controllers/productController.js";
 import restaurantController from "../controllers/restaurantController.js";
 import userController from "../controllers/userController.js";
-<<<<<<< HEAD
 import vendorController from "../controllers/vendorController.js";
-=======
-import vendorController from "../controllers/vendorController.js"
-import restaurantController from "../controllers/restaurantController.js"
-import productController from "../controllers/productController.js";
->>>>>>> 60a8c63 (get all delete update)
+import cartController from "../controllers/cartController.js"
 
 let router = express.Router();
 
@@ -29,6 +24,9 @@ let initWebRoutes = (app) => {
 	router.get("/api/get-all-product", productController.getAllProduct)
 	router.delete("/api/delete-product", productController.deleteProduct)
 	router.put("/api/update-product", productController.updateProduct)
+
+	router.post("/api/create-new-cart", cartController.createNewCart)
+	router.get("/api/get-all-cart", cartController.getAllCart)
 
 	return app.use("/", router);
 
