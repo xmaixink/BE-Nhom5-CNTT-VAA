@@ -121,9 +121,72 @@ let updateUserService = (data) => {
 		} catch (e) {
 			reject(e)
 		}
-	})
-}
-
-module.exports = {
-	createNewUserService, getAllUserService, deleteUserService, updateUserService,
-};
+	});
+  };
+  let loginUserService = (email, password) => {
+	return new Promise(async (resolve, reject) => {
+	  try {
+		let user = await User.findOne({ email });
+  
+		if (!user) {
+		  return resolve({
+			errCode: 1,
+			errMessage: "User not found",
+		  });
+		}
+		let isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+		  return resolve({
+			errCode: 2,
+			errMessage: "Invalid password",
+		  });
+		}
+		resolve({
+		  errCode: 0,
+		  message: "Login successful",
+		  user: {
+			id: user._id,
+			email: user.email,
+			name: user.name,
+			address: user.address,
+		  },
+		});
+	  } catch (e) {
+		reject(e);
+	  }
+	});
+  };
+  
+  let registerUserService = (email, name, password) => {
+	return new Promise(async (resolve, reject) => {
+	  try {
+		const foundUser = await User.findOne({ email: email });
+		if (foundUser)
+		  resolve({
+			errCode: 1,
+			errMessage: "User exit",
+		  });
+		let hashPasswordFromBcrypt = await hashUserPassword(password);
+  
+		await User.create({
+		  email: email,
+		  name: name,
+		  password: hashPasswordFromBcrypt,
+		});
+		resolve({
+		  errCode: 0,
+		  message: "user register succeed",
+		});
+	  } catch (e) {
+		reject(e);
+	  }
+	});
+  };
+  module.exports = {
+	createNewUserService,
+	getAllUserService,
+	deleteUserService,
+	updateUserService,
+	loginUserService,
+	registerUserService,
+  };

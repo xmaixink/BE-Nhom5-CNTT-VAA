@@ -8,7 +8,8 @@ import cartController from "../controllers/cartController.js"
 let router = express.Router();
 
 let initWebRoutes = (app) => {
-
+	router.post("/api/login", userController.loginUser);
+  	router.post("/api/register", userController.RegisterUser);
 	router.get("/api/get-all-users", userController.getAllUser)
 	router.post("/api/create-new-user", userController.createNewUser)
 	router.delete("/api/delete-user", userController.deleteUser)
