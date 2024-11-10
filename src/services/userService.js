@@ -1,4 +1,4 @@
-import User from "../models/user"
+import User from "../models/user";
 
 import bcrypt from "bcrypt";
 
@@ -12,12 +12,11 @@ const hashUserPassword = (password) => {
 		} catch (e) {
 			reject(e);
 		}
-	})
-}
+	});
+};
 
 let createNewUserService = (data) => {
 	return new Promise(async (resolve, reject) => {
-
 		try {
 			let hashPasswordFromBcrypt = await hashUserPassword(data.password);
 
@@ -25,7 +24,7 @@ let createNewUserService = (data) => {
 				email: data.email,
 				name: data.name,
 				password: hashPasswordFromBcrypt,
-				address: data.address
+				address: data.address,
 			});
 
 			resolve({
@@ -33,10 +32,10 @@ let createNewUserService = (data) => {
 				message: "Added user succeed",
 			});
 		} catch (e) {
-			reject(e)
+			reject(e);
 		}
-	})
-}
+	});
+};
 
 let getAllUserService = (userId) => {
 	return new Promise(async (resolve, reject) => {
@@ -44,31 +43,28 @@ let getAllUserService = (userId) => {
 			let users = "";
 
 			if (userId === "ALL") {
-				users = await User.find().select('-password');
+				users = await User.find().select("-password");
 			}
-			if (userId && userId != 'ALL') {
-				users = await User.findOne({ _id: userId }).select('-password');
+			if (userId && userId != "ALL") {
+				users = await User.findOne({ _id: userId }).select("-password");
 			}
 
 			resolve(users);
-
 		} catch (e) {
-			reject(e)
+			reject(e);
 		}
-	})
-}
+	});
+};
 
 let deleteUserService = (userId) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			let foundUser = await User.findOne(
-				{ _id: userId }
-			)
+			let foundUser = await User.findOne({ _id: userId });
 			if (!foundUser) {
 				resolve({
 					errCode: 2,
-					errMessage: `The user isn't exist`
-				})
+					errMessage: `The user isn't exist`,
+				});
 			}
 			await User.findByIdAndDelete(userId);
 
@@ -77,10 +73,10 @@ let deleteUserService = (userId) => {
 				message: "Delete User Ok",
 			});
 		} catch (e) {
-			reject(e)
+			reject(e);
 		}
-	})
-}
+	});
+};
 
 let updateUserService = (data) => {
 	return new Promise(async (resolve, reject) => {
@@ -88,29 +84,29 @@ let updateUserService = (data) => {
 			if (!data.id) {
 				resolve({
 					errCode: 2,
-					errMessage: "Missing required parameters updateUserService"
-				})
+					errMessage: "Missing required parameters updateUserService",
+				});
 			}
 
 			const user = await User.findOne({
 				_id: data.id,
-			})
+			});
 
 			if (user) {
 				user.email = data.email;
 				user.name = data.name;
-				user.address = data.address
+				user.address = data.address;
 
 				await user.save();
 
 				resolve({
 					errCode: 0,
-					message: "Update the user succeeds!"
-				})
+					message: "Update the user succeeds!",
+				});
 			} else {
 				resolve({
 					errCode: 1,
-					errMessage: "User not found"
+					errMessage: "User not found",
 				});
 			}
 
@@ -119,74 +115,74 @@ let updateUserService = (data) => {
 				message: "Update User Ok",
 			});
 		} catch (e) {
-			reject(e)
+			reject(e);
 		}
 	});
-  };
-  let loginUserService = (email, password) => {
+};
+let loginUserService = (email, password) => {
 	return new Promise(async (resolve, reject) => {
-	  try {
-		let user = await User.findOne({ email });
-  
-		if (!user) {
-		  return resolve({
-			errCode: 1,
-			errMessage: "User not found",
-		  });
+		try {
+			let user = await User.findOne({ email });
+
+			if (!user) {
+				return resolve({
+					errCode: 1,
+					errMessage: "User not found",
+				});
+			}
+			let isMatch = await bcrypt.compare(password, user.password);
+			if (!isMatch) {
+				return resolve({
+					errCode: 2,
+					errMessage: "Invalid password",
+				});
+			}
+			resolve({
+				errCode: 0,
+				message: "Login successful",
+				user: {
+					id: user._id,
+					email: user.email,
+					name: user.name,
+					address: user.address,
+				},
+			});
+		} catch (e) {
+			reject(e);
 		}
-		let isMatch = await bcrypt.compare(password, user.password);
-		if (!isMatch) {
-		  return resolve({
-			errCode: 2,
-			errMessage: "Invalid password",
-		  });
-		}
-		resolve({
-		  errCode: 0,
-		  message: "Login successful",
-		  user: {
-			id: user._id,
-			email: user.email,
-			name: user.name,
-			address: user.address,
-		  },
-		});
-	  } catch (e) {
-		reject(e);
-	  }
 	});
-  };
-  
-  let registerUserService = (email, name, password) => {
+};
+
+let registerUserService = (email, name, password) => {
 	return new Promise(async (resolve, reject) => {
-	  try {
-		const foundUser = await User.findOne({ email: email });
-		if (foundUser)
-		  resolve({
-			errCode: 1,
-			errMessage: "User exit",
-		  });
-		let hashPasswordFromBcrypt = await hashUserPassword(password);
-  
-		await User.create({
-		  email: email,
-		  name: name,
-		  password: hashPasswordFromBcrypt,
-		});
-		resolve({
-		  errCode: 0,
-		  message: "user register succeed",
-		});
-	  } catch (e) {
-		reject(e);
-	  }
+		try {
+			const foundUser = await User.findOne({ email: email });
+			if (foundUser)
+				resolve({
+					errCode: 1,
+					errMessage: "User exit",
+				});
+			let hashPasswordFromBcrypt = await hashUserPassword(password);
+
+			await User.create({
+				email: email,
+				name: name,
+				password: hashPasswordFromBcrypt,
+			});
+			resolve({
+				errCode: 0,
+				message: "user register succeed",
+			});
+		} catch (e) {
+			reject(e);
+		}
 	});
-  };
-  module.exports = {
+};
+module.exports = {
 	createNewUserService,
 	getAllUserService,
 	deleteUserService,
 	updateUserService,
 	loginUserService,
 	registerUserService,
-  };
+};

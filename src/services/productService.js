@@ -22,7 +22,6 @@ let createNewProductService = (data) => {
       })
 }
 let getAllProductService = (productId) => {
-
       return new Promise(async (resolve, reject) => {
             try {
                   let products = "";
@@ -67,7 +66,6 @@ let deleteProductService = (productId) => {
 let updateProductService = (data) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  console.log('check data', data)
                   if (!data.id) {
                         resolve({
                               errCode: 2,
@@ -83,8 +81,6 @@ let updateProductService = (data) => {
                         product.name = data.name;
                         product.price = data.price;
                         product.description = data.description;
-                        product.ingredients = data.ingredients;
-                        product.image = data.image;
 
                         await product.save();
 

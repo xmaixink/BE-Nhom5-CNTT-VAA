@@ -15,7 +15,19 @@ let getAllCart = async (req, res) => {
             carts
       })
 }
+let deleteCart = async (req, res) => {
+      let data = req.body.id
+      let message = await cartService.deleteCartService(data)
+      return res.status(200).json(message)
+}
 
+let updateCart = async (req, res) => {
+      let data = req.body
+
+      let message = await cartService.updateCartService(data)
+
+      return res.status(200).json(message)
+}
 module.exports = {
-      createNewCart, getAllCart
+      createNewCart, getAllCart, deleteCart, updateCart
 };
