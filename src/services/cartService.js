@@ -7,7 +7,9 @@ let createNewCartService = (data) => {
                   await Cart.create({
                         imageProduct: data.imageProduct,
                         nameProduct: data.nameProduct,
-                        priceProduct: data.priceProduct
+                        priceProduct: data.priceProduct,
+                        number: data.number || 1, 
+                        quality: data.quality || "Standard" 
                   });
 
                   resolve({
@@ -15,23 +17,22 @@ let createNewCartService = (data) => {
                         message: "Added cart succeed",
                   });
             } catch (e) {
-                  reject(e)
+                  reject(e);
             }
-      })
-}
+      });
+};
 
 let getAllCartService = () => {
       return new Promise(async (resolve, reject) => {
             try {
                   let carts = await Cart.find();
-
                   resolve(carts);
 
             } catch (e) {
-                  reject(e)
+                  reject(e);
             }
-      })
-}
+      });
+};
 
 let deleteCartService = (CartId) => {
       return new Promise(async (resolve, reject) => {
@@ -42,15 +43,16 @@ let deleteCartService = (CartId) => {
                   if (!foundCart) {
                         resolve({
                               errCode: 2,
-                              errMessage: `Cart doesn't exist`
+                              errMessage: `Cart doesn't exist`,
                         });
-                  }
+                  } else {
                   await Cart.findByIdAndDelete(CartId);
 
                   resolve({
                         errCode: 0,
                         message: "Delete Cart duoc rui ",
                   });
+            }
             } catch (e) {
                   reject(e);
             }
@@ -60,11 +62,11 @@ let deleteCartService = (CartId) => {
 let updateCartService = (data) => {
       return new Promise(async (resolve, reject) => {
             try {
-                  console.log('check data', data)
+                  console.log('check data', data);
                   if (!data.id) {
                         resolve({
                               errCode: 2,
-                              errMessage: "Missing required parameters updateCartService"
+                              errMessage: "Missing required parameters updateCartService",
                         });
                   }
 
@@ -76,17 +78,19 @@ let updateCartService = (data) => {
                         cart.imageProduct = data.imageProduct;
                         cart.nameProduct = data.nameProduct;
                         cart.priceProduct = data.priceProduct;
+                        cart.number = data.number !== undefined ? data.number : cart.number;
+                        cart.quality = data.quality || cart.quality;
 
                         await cart.save();
 
                         resolve({
                               errCode: 0,
-                              message: "Update cart succeeds!"
+                              message: "Update cart successfully!",
                         });
                   } else {
                         resolve({
                               errCode: 1,
-                              errMessage: "Cart not found"
+                              errMessage: "Cart not found",
                         });
                   }
 
@@ -98,5 +102,5 @@ let updateCartService = (data) => {
 
 
 module.exports = {
-      createNewCartService, getAllCartService, deleteCartService, updateCartService
+      createNewCartService, getAllCartService, deleteCartService, updateCartService,
 };
