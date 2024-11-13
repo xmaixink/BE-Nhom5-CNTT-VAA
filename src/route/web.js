@@ -5,6 +5,7 @@ import restaurantController from "../controllers/restaurantController.js";
 import userController from "../controllers/userController.js";
 import vendorController from "../controllers/vendorController.js";
 
+const vnpay = require('./vnpay.js');
 
 let router = express.Router();
 
@@ -18,24 +19,21 @@ let initWebRoutes = (app) => {
 	router.get("/api/get-all-vendors", vendorController.getAllVendors);
 	router.post("/api/create-new-vendor", vendorController.createNewVendor);
 
-	router.post(
-		"/api/create-new-restaurant",
-		restaurantController.createNewRestaurant
-	)
-	router.post("/api/create-new-product", productController.createNewProduct)
-	router.get("/api/get-all-product", productController.getAllProduct)
-	router.delete("/api/delete-product", productController.deleteProduct)
-	router.put("/api/update-product", productController.updateProduct)
+	router.post("/api/create-new-restaurant", restaurantController.createNewRestaurant);
+	router.post("/api/create-new-product", productController.createNewProduct);
+	router.get("/api/get-all-product", productController.getAllProduct);
+	router.delete("/api/delete-product", productController.deleteProduct);
+	router.put("/api/update-product", productController.updateProduct);
 	router.get("/api/get-all-restaurant", restaurantController.getAllRestaurants);
 
+	router.post("/api/create-new-cart", cartController.createNewCart);
+	router.get("/api/get-all-cart", cartController.getAllCart);
+	router.delete("/api/delete-cart", cartController.deleteCart);
+	router.put("/api/update-cart", cartController.updateCart);
 
-	router.post("/api/create-new-cart", cartController.createNewCart)
-	router.get("/api/get-all-cart", cartController.getAllCart)
-	router.delete("/api/delete-cart", cartController.deleteCart)
-	router.put("/api/update-cart", cartController.updateCart)
+	app.use("/api/v1/vnpay", vnpay);
+
 	return app.use("/", router);
-
-
 };
 
 module.exports = initWebRoutes;

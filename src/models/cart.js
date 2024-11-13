@@ -15,12 +15,12 @@ const CartSchema = mongoose.Schema(
                   required: true,
             },
             number: {
-              type: Number,
-              default: 1, 
+                  type: Number,
+                  default: 1,
             },
             quality: {
-              type: String,
-              required: false,
+                  type: String,
+                  required: false,
             },
       },
       {

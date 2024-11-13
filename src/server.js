@@ -1,7 +1,7 @@
-import express from "express";
 import bodyParser from "body-parser";
+import express from "express";
+import mongoose from "mongoose";
 import initWebRoutes from "./route/web.js";
-import mongoose from "mongoose"
 
 require("dotenv").config();
 const mongoURL = process.env.MONGO_URL;
