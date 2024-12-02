@@ -24,7 +24,7 @@ let createNewUserService = (data) => {
 				email: data.email,
 				name: data.name,
 				password: hashPasswordFromBcrypt,
-				address: data.address,
+				phoneNumber: data.phoneNumber,
 			});
 
 			resolve({
@@ -123,7 +123,6 @@ let loginUserService = (email, password) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			let user = await User.findOne({ email });
-
 			if (!user) {
 				return resolve({
 					errCode: 1,
@@ -144,7 +143,7 @@ let loginUserService = (email, password) => {
 					id: user._id,
 					email: user.email,
 					name: user.name,
-					address: user.address,
+					phoneNumber: user.phoneNumber,
 				},
 			});
 		} catch (e) {
@@ -153,7 +152,7 @@ let loginUserService = (email, password) => {
 	});
 };
 
-let registerUserService = (email, name, password) => {
+let registerUserService = (email, name, password, phoneNumber) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const foundUser = await User.findOne({ email: email });
@@ -168,6 +167,7 @@ let registerUserService = (email, name, password) => {
 				email: email,
 				name: name,
 				password: hashPasswordFromBcrypt,
+				phoneNumber: phoneNumber,
 			});
 			resolve({
 				errCode: 0,

@@ -17,20 +17,8 @@ const UserSchema = mongoose.Schema(
             },
             phoneNumber: {
                   type: String,
-                  required: false,
-            },
-            address: {
-                  type: String,
                   required: true,
             },
-            image: {
-                  type: String,
-                  required: false,
-            },
-            role: {
-                  type: String,
-                  required: false,
-            }
       },
       {
             timestamps: true,

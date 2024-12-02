@@ -7,6 +7,10 @@ const VendorSchema = mongoose.Schema(
                   unique: true,
                   required: true,
             },
+            nameVendor: {
+                  type: String,
+                  required: true,
+            },
             password: {
                   type: String,
                   required: true,
@@ -17,7 +21,7 @@ const VendorSchema = mongoose.Schema(
             },
             totalRestaurants: {
                   type: Number,
-                  required: true,
+                  default: 0,
             }
       },
       {

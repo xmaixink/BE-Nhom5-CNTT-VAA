@@ -53,16 +53,16 @@ let loginUser = async (req, res) => {
       return res.status(200).json(data);
 };
 let RegisterUser = async (req, res) => {
-      let { email, password, name } = req.body;
+      let { email, password, name, phoneNumber } = req.body;
 
-      if (!email || !password || !name) {
+      if (!email || !password || !name || !phoneNumber) {
             return res.status(400).json({
                   errCode: 1,
                   errMessage: "Missing email or password or userName",
             });
       }
 
-      let message = await userService.registerUserService(email, name, password);
+      let message = await userService.registerUserService(email, name, password, phoneNumber);
       return res.status(200).json(message);
 };
 module.exports = {

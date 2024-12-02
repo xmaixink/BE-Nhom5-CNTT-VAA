@@ -81,7 +81,8 @@ let updateProductService = (data) => {
                         product.name = data.name;
                         product.price = data.price;
                         product.description = data.description;
-
+                        product.ingredients = data.ingredients;
+                        product.image = data.image;
                         await product.save();
 
                         resolve({

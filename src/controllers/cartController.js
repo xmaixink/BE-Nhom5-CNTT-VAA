@@ -1,13 +1,14 @@
 import cartService from "../services/cartService";
 
 let createNewCart = async (req, res) => {
-      let { imageProduct, nameProduct, priceProduct, number, quality } = req.body;
+      let { imageProduct, nameProduct, priceProduct, number, quality, idUser } = req.body;
       let message = await cartService.createNewCartService({
-        imageProduct,
-        nameProduct,
-        priceProduct,
-        number: number || 1,
-        quality: quality || "Standard",
+            idUser,
+            imageProduct,
+            nameProduct,
+            priceProduct,
+            number: number || 1,
+            quality: quality || "Standard",
       });
 
       return res.status(200).json(message);
@@ -29,11 +30,10 @@ let deleteCart = async (req, res) => {
 };
 
 let updateCart = async (req, res) => {
-      let { _id: id, number, quality } = req.body;
+      let { _id: id, number } = req.body;
       let message = await cartService.updateCartService({
-        id,
-        number,
-        quality,
+            id,
+            number,
       });
 
       return res.status(200).json(message);

@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const CartSchema = mongoose.Schema(
       {
+            idUser: {
+                  type: String,
+                  required: true,
+            },
             imageProduct: {
                   type: String,
                   required: true,

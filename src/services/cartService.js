@@ -5,11 +5,12 @@ let createNewCartService = (data) => {
 
             try {
                   await Cart.create({
+                        idUser: data.idUser,
                         imageProduct: data.imageProduct,
                         nameProduct: data.nameProduct,
                         priceProduct: data.priceProduct,
-                        number: data.number || 1, 
-                        quality: data.quality || "Standard" 
+                        number: data.number || 1,
+                        quality: data.quality || "Standard"
                   });
 
                   resolve({
@@ -46,13 +47,13 @@ let deleteCartService = (CartId) => {
                               errMessage: `Cart doesn't exist`,
                         });
                   } else {
-                  await Cart.findByIdAndDelete(CartId);
+                        await Cart.findByIdAndDelete(CartId);
 
-                  resolve({
-                        errCode: 0,
-                        message: "Delete Cart duoc rui ",
-                  });
-            }
+                        resolve({
+                              errCode: 0,
+                              message: "Delete Cart duoc rui ",
+                        });
+                  }
             } catch (e) {
                   reject(e);
             }
@@ -75,11 +76,7 @@ let updateCartService = (data) => {
                   });
 
                   if (cart) {
-                        cart.imageProduct = data.imageProduct;
-                        cart.nameProduct = data.nameProduct;
-                        cart.priceProduct = data.priceProduct;
                         cart.number = data.number !== undefined ? data.number : cart.number;
-                        cart.quality = data.quality || cart.quality;
 
                         await cart.save();
 
